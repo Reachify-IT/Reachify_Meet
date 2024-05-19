@@ -35,11 +35,11 @@ var AppProcess = function () {
       }
       if (isAudioMute) {
         audio.enabled = true;
-        $(this).html("<span class='material-icons'>mic</span>");
+        $(this).html("<span class='material-icons' style='width:100%;'>mic</span>");
         updateMediaSenders(audio, rtp_aud_senders);
       } else {
         audio.enabled = false;
-        $(this).html("<span class='material-icons'>mic-off</span>");
+        $(this).html("<span class='material-icons' style='width:100%;'>mic_off</span>");
         removeMediaSenders(rtp_aud_senders);
       }
       isAudioMute = !isAudioMute;
@@ -60,6 +60,19 @@ var AppProcess = function () {
         await videoProcess(video_states.ScreenShare);
       }
     });
+  }
+  async function loadAudio(){
+    try{
+      var astream= await navigator.mediaDevices.getUserMedia({
+        video: false,
+        audio:true
+      });
+      audio=astream.getAudioTracks()[0];
+      audio.enabled=false;
+    }catch(e)
+    {
+      console.log(e);
+    }
   }
   function connection_status(connection){
     if(connection &&(connection.connectionState=="new"||
@@ -85,8 +98,41 @@ var AppProcess = function () {
         }
       }
     }
+  }function removeMediaSenders(rtp_senders)
+  {
+    for(var con_id in peers_connection_ids){
+      if(rtp_senders[con_id] && connection_status(peers_connection
+       [con_id]
+      ))
+      {
+        peers_connection[con_id].removeTrack(rtp_senders[con_id]);
+        rtp_senders[con_id]=null;
+      }
+    }
+  }
+  function removeVideoStream(rtp_vid_senders)
+  {
+    if(videoCamTrack){
+      videoCamTrack.stop();
+      videoCamTrack=null;
+      local_div.srcObject=null;
+      removeMediaSenders(rtp_vid_senders);
+    }
   }
   async function videoProcess(newVideoState) {
+    if(newVideoState==video_states.None){
+      $("#videoCamOnOff").html("<span class='material-icons' style='width:100%;'>videocam_off</span>");
+      
+      $("#ScreenShareOnOf").html('<span class="material-icons">present_to_all</span><div>PresentNow</div>');
+            
+      video_st=newVideoState;
+    removeVideoStream(rtp_vid_senders);
+    return;
+    }
+    
+    if(newVideoState==video_states.Camera){
+      $("#videoCamOnOff").html("<span class='material-icons' style='width:100%;'>videocam_on</span>");
+    }
     try {
       var vstream = null;
       if (newVideoState == video_states.Camera) {
@@ -119,7 +165,15 @@ var AppProcess = function () {
       return;
     } video_st = newVideoState;
 
+     if(newVideoState==video_states.Camera){
+      $("#videoCamOnOff").html('<span class="material-icons" style:"width:100%;>videocam</span>');
+      $("ScreenShareOnOf").html('<span class="material-icons" text-success>present_to_all</span><div>Present Now</div>');
 
+     }else if(newVideoState==video_states.ScreenShare){
+      $("#videoCamOnOff").html('<span class="material-icons" style:"width:100%;>videocam_off</span>');
+
+      $("ScreenShareOnOf").html('<span class="material-icons" text-success>present_to_all</span><div class="text-success">Stop Present Now</div>');
+     }
 
   }
   var iceConfiguration = {
@@ -164,7 +218,7 @@ var AppProcess = function () {
         remote_aud_stream[connid]
           .getAudioTracks()
           .forEach((t) => remote_aud_stream[connid].removeTrack(t));
-        remote_vid_stream[connid].addTrack(event.track);
+        remote_aud_stream[connid].addTrack(event.track);
         var remoteAudioPlayer = document.getElementById("a_" + connid);
         remoteAudioPlayer.srcObject = null;
         remoteAudioPlayer.srcObject = remote_aud_stream[connid]
@@ -174,12 +228,15 @@ var AppProcess = function () {
     };
     peers_connection_ids[connid] = connid;
     peers_connection[connid] = connection;
-
-    return connection;
-    if(video_st==video_states.Camera||video_st==video_states.
-      ScreenShare ){
-    updateMediaSenders(videoCamTrack,rtp_vid_senders);
+    if(video_st==video_states.Camera||
+      video_st==video_states.ScreenShare )
+      {
+     updateMediaSenders(videoCamTrack,rtp_vid_senders);
       }
+    
+    return connection;
+    
+      
   }
   async function setOffer(connid) {
     var connection = peers_connection[connid];
