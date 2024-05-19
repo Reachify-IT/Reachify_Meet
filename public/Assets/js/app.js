@@ -151,6 +151,10 @@ var AppProcess = function () {
           },
           audio: false,
         });
+        vstream.oninactive=(e)=>{
+          removeVideoStream(rtp_vid_senders);
+          $("#ScreenShareOnOf").html('<span class="material-icons" text-success>present_to_all</span><div>Present Now</div>');
+        }
 
       }
       if (vstream && vstream.getVideoTracks().length > 0) {
@@ -167,12 +171,12 @@ var AppProcess = function () {
 
      if(newVideoState==video_states.Camera){
       $("#videoCamOnOff").html('<span class="material-icons" style:"width:100%;>videocam</span>');
-      $("ScreenShareOnOf").html('<span class="material-icons" text-success>present_to_all</span><div>Present Now</div>');
+      $("#ScreenShareOnOf").html('<span class="material-icons" text-success>present_to_all</span><div>Present Now</div>');
 
      }else if(newVideoState==video_states.ScreenShare){
       $("#videoCamOnOff").html('<span class="material-icons" style:"width:100%;>videocam_off</span>');
 
-      $("ScreenShareOnOf").html('<span class="material-icons" text-success>present_to_all</span><div class="text-success">Stop Present Now</div>');
+      $("#ScreenShareOnOf").html('<span class="material-icons" text-success>present_to_all</span><div class="text-success">Stop Present Now</div>');
      }
 
   }
@@ -281,15 +285,37 @@ var AppProcess = function () {
     }
 
   }
+  async function closeConnection(connid){
+    peers_connection_ids[connid]=null;
+    if(peers_connection[connid]){
+      peers_connection[connid].close();
+      peers_connection[connid=null];
+    }
+    if(remote_aud_stream[connid]){
+      remote_aud_stream[connid].getTracks().forEach((t)=>{
+        if(t.stop) t.stop();
+      });
+      remote_aud_stream[connid]=null;
+    }
+    if(remote_vid_stream[connid]){
+      remote_vid_stream[connid].getTracks().forEach((t)=>{
+        if(t.stop) t.stop();
+      });
+      remote_vid_stream[connid]=null;
+    }
+  }
   return {
     setNewConnection: async function (connid) {
       await setConnection(connid);
     },
-    init: async function (SPD_function, my_connid) {
-      _init(SPD_function, my_connid);
+    init: async function (SDP_function, my_connid) {
+      _init(SDP_function, my_connid);
     },
-    processClientFunc: async function (SPD_function, from_connid) {
+    processClientFunc: async function (data, from_connid) {
       await SDPProcess(data, from_connid);
+    },
+    closeConnectionCall: async function (connid) {
+      await closeConnection(connid);
     },
   };
 }();
@@ -325,6 +351,10 @@ var MyApp = (function () {
           });
         }
       }
+    });
+    socket.on("infrom_other_about_disconnected_user",function(data){
+      $("#"+data.connId).remove();
+      AppProcess.closeConnectionCall(data.connId);
     });
     socket.on("inform_others_about_me", function (data) {
       addUser(data.other_user_id, data.connId);
