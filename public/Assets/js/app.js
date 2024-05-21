@@ -363,6 +363,19 @@ var MyApp = (function () {
       addUser(data.other_user_id, data.connId,data.userNumber);
       AppProcess.setNewConnection(data.connId);
     });
+    socket.on("showFileMessage",function(data){
+      var time=new Date();
+      var lTime=time.toLocaleString("en-US",{
+        hour:"numeric",
+        minute:"numeric",
+        hour12:true
+      });
+      var attachFileAreaForOther=document.querySelector(".show-attach-file");
+
+       attachFileAreaForOther.innerHTML+="<div class='left-align' style='display:flex;align-items:center;'><img src='public/assets/images/other.jpg'style='height:40px;width:40px;'class='caller-image circle'><div style='font-weight:600;margin:0 5px;'>"+data.username+"</div>:<div><a style='color:#007bff;' href ='"+data.filePath+"' dwonload>"+data.fileName+"</a></div></div><br/>";
+
+
+    });
     socket.on("inform_me_about_other_user", function (other_users) {
       var userNumber=other_users.length;
       var userNumb=userNumber+1;
@@ -403,6 +416,11 @@ var MyApp = (function () {
       $("#messages").append(div);
       $("#msgbox").val("");
     });
+    var url=window.location.href;
+   $(".meeting_url").text(url);
+   $("#divUsers").on("dblclick","video",function(){
+    this.requestFullscreen();
+   });
   }
   
   function addUser(other_user_id, connId,userNum) {
@@ -435,17 +453,117 @@ var MyApp = (function () {
 
   });
   $(document).on("click",".top-left-participant-wrap",function(){
+    $(".people-heading").addClass("active");
+    $(".chat-heading").removeClass("active");
     $(".g-right-details-wrap").show(300);
     $(".in-call-wrap-up").show(300);
     $(".chat-show-wrap").hide(300);
 
    });
    $(document).on("click",".top-left-chat-wrap",function(){
+    $(".people-heading").removeClass("active");
+    $(".chat-heading").addClass("active");
     $(".g-right-details-wrap").show(300);
     $(".in-call-wrap-up").hide(300);
     $(".chat-show-wrap").show(300);
 
    });
+   $(document).on("click",".end-call-wrap",function(){
+    $(".top-box-show").css({
+      "display":"block"
+    }).html(' <div class="top-box align-vertical-middle profile-dialogue-show"> <h4 class="mt-3" style="text-align:center;color:white">Leave Meeting</h4><hr> <div class="call-leave-cancel-action d-flex justify-content-center align-items-center w-100"> <a href="/action.html"><button class="call-leave-action btn btn-danger mr-5"> Leave</button></a> <button class="call-cancel-action btn btn-secondary">Cancel</button> </div> </div>');
+    });
+   $(document).mouseup(function(e){
+    var container=new Array();
+    container.push($(".top-box-show"));
+    $.each(container,function(key,value){
+      if(!$(value).is(e.target)&&$(value).has(e.target).length==0){
+        $(value).empty();
+      }
+    });
+   });
+   $(document).mouseup(function(e){
+    var container=new Array();
+    container.push($(".g-details"));
+    container.push($(".g-right-details-wrap"));
+
+    $.each(container,function(key,value){
+      if(!$(value).is(e.target) && $(value).has(e.target).length==0){
+        $(value).hide(300);
+      }
+    });
+   });
+   $(document).on("click",".call-cancel-action",function(){
+    $('.top-box-show').html('')
+   });
+   $(document).on("click",".copy_info",function(){
+
+    var $temp=$("<input>");
+    $("body").append($temp);
+    $temp.val($(".meeting_url").text()).select();
+    document.execCommand("copy");
+    $temp.remove();
+    $(".link-conf").show();
+    setTimeout(function(){
+      $(".link-conf").hide();
+    },3000);
+   });
+   $(document).on("click",".meeting-details-button",function(){
+    $(".g-details").slideDown(300);
+   });
+   $(document).on("click",".g-details-heading-attachment",function(){
+    $(".g-details-heading-show").hide();
+    $(".g-details-heading-show-attachment").show();
+    $(this).addClass('active');
+    $(".g-details-heading-detail").removeClass('active');
+   });
+   $(document).on("click",".g-details-heading-detail",function(){
+    $(".g-details-heading-show").show();
+    $(".g-details-heading-show-attachment").hide();
+    $(this).addClass('active');
+    $(".g-details-heading-attachment").removeClass('active');
+   });
+   var base_url=window.location.origin;
+   $(document).on("change",".custom-file-input",function(e){
+    var fileName=$(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+   });
+
+    $(document).on("click",".share-attach",function(e){
+      e.preventDefault();
+      var att_img=$("#customFile").prop('files')[0];
+      var formData= new FormData();
+      formData.append("zipfile",att_img);
+      formData.append("meeting_id",meeting_id);
+      formData.append("username",user_id);
+      console.log(formData);
+      $.ajax({
+        url:base_url+"/attachimg",
+        type:"POST",
+        data:formData,
+        contentType:false,
+        processData:false,
+        success:function(response){
+          console.log(response)
+        },
+        error:function(){
+          console.log('error');
+        }
+      });
+      var attachFileArea=document.querySelector(".show-attach-file");
+      var attachFileName=$("#customFile").val().split("\\").pop();
+      var attachFilePath="public/attachment/"+meeting_id+"/"+attachFileName;
+      attachFileArea.innerHTML+="<div class='left-align' style='display:flex;align-items:center;'><img src='public/assets/images/other.jpg'style='height:40px;width:40px;'class='caller-image circle'><div style='font-weight:600;margin:0 5px;'>"+user_id+"</div>:<div><a style='color:#007bff;' href ='"+attachFilePath+"' download>"+attachFileName+"</a></div></div><br/>";
+     $("label.custom-file-label").text("");
+     socket.emit("fileTransferToOther",{
+
+     
+     username:user_id,
+     meetingid:meeting_id,
+     filePath:attachFilePath,
+     fileName:attachFileName
+     });
+    });
   return {
     _init: function (uid, mid) {
       init(uid, mid);
