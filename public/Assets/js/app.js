@@ -98,7 +98,8 @@ var AppProcess = function () {
         }
       }
     }
-  }function removeMediaSenders(rtp_senders)
+  }
+  function removeMediaSenders(rtp_senders)
   {
     for(var con_id in peers_connection_ids){
       if(rtp_senders[con_id] && connection_status(peers_connection
@@ -191,7 +192,7 @@ var AppProcess = function () {
     ],
   };
   async function setConnection(connid) {
-    var connection = new RTCPeerConnection(iceConfiguration);
+    const connection = new RTCPeerConnection(iceConfiguration);
     connection.onnegotiationneeded = async function (event) {
       await setOffer(connid);
     };
@@ -564,6 +565,65 @@ var MyApp = (function () {
      fileName:attachFileName
      });
     });
+    $(document).on("click",".option-icon",function(){
+      $(".recording-show").toggle(300);
+    });
+    $(document).on("click",".start-record",function(){
+      $(this).removeClass().addClass("stop-record btn-danger text-dark").text("Stop Recording");
+      startRecording();
+    });
+    $(document).on("click",".stop-record",function(){
+      $(this).removeClass().addClass("start-record btn-dark text-danger").text("Start Recording");
+      mediaRecorder.stop();
+    });
+    var mediaRecorder;
+    var chunks=[];
+    async function captureScreen(mediaConstraints={
+      video:true
+    }){
+      const screenStream=await navigator.mediaDevices.getDisplayMedia(mediaConstraints);
+      return screenStream;
+    }
+    async function captureAudio(mediaConstraints={
+      video:false,
+      audio:true
+    }){
+      const audioStream=await navigator.mediaDevices.getUserMedia(mediaConstraints);
+      return audioStream;
+    }
+     async function startRecording(){
+      const screenStream=await captureScreen();
+      const audioStream=await captureAudio();
+      const stream=new MediaStream([
+        ...screenStream.getTracks(),
+        ...audioStream.getTracks(),
+      ]);
+      mediaRecorder=new MediaRecorder(stream);
+      mediaRecorder.start();
+      mediaRecorder.onstop=function(e){
+        var clipName=prompt("Enter a name for your recording");
+      stream.getTracks().forEach((track)=>track.stop());
+      const blob=new Blob(chunks,{
+        type:"video/webm",
+      });
+      const url=window.URL.createObjectURL(blob);
+      const a=document.createElement("a");
+      a.style.display="none";
+      a.href=url;
+      a.download=clipName+".webm";
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(()=>{
+       document.body.removeChild(a);
+       window.URL.revokeObjectURL(url);
+      },100);
+      }
+      mediaRecorder.ondataavailable=function(e){
+        chunks.push(e.data);
+      }
+     }
+
+
   return {
     _init: function (uid, mid) {
       init(uid, mid);
