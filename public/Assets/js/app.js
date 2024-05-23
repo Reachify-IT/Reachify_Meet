@@ -276,7 +276,7 @@ var AppProcess = function () {
       if (!peers_connection[from_connid]) {
         await setConnection(from_connid);
       }
-      try {
+      try { 
         await peers_connection[from_connid].addIceCandidate(message.
           icecandidate);
 
@@ -354,6 +354,15 @@ var MyApp = (function () {
         }
       }
     });
+    socket.on("HandRaise_info_for_others",function(data){
+    if(data.handRaise){
+      $("#hand_"+connId).show();
+    }
+    else{
+      $("#hand_"+connId).hide();
+
+    }
+    });
     socket.on("infrom_other_about_disconnected_user",function(data){
       $("#"+data.connId).remove();
       $(".participant-count").text(data.uNumber);
@@ -404,6 +413,18 @@ var MyApp = (function () {
     });
   }
   function eventHandeling(){
+    var handRaise=false;
+    $("#handRaiseAction").on("click",function(){
+      if(!handRaise){
+      $("img.handRaise").show();
+      handRaise=true;
+      socket.emit("sendHandRaise",handRaise);
+      }else{
+        $("img.handRaise").hide();
+        handRaise=false;
+        socket.emit("sendHandRaise",handRaise);
+      }
+    });
     $("#btnsend").on("click",function(){
       var msgData=$("#msgbox").val();
       socket.emit("sendMessage",msgData);
@@ -430,6 +451,8 @@ var MyApp = (function () {
     newDivId.find("h2").text(other_user_id);
     newDivId.find("video").attr("id", "v_" + connId);
     newDivId.find("audio").attr("id", "a_" + connId);
+    newDivId.find("img").attr("id", "hand_" + connId);
+
     newDivId.show();
     $("#divUsers").append(newDivId);
     $(".in-call-wrap-up").append(' <div class="in-call-wrap d-flex justify-content-between align-items-center mb-3" id="participant_'+connId+'"> <div class="participant-img-name-wrap display-center cursor-pointer"> <div class="participant-img"> <img src="public/Assets/images/other.jpg" alt="" class="border border-secondary" style="height: 40px;width: 40px;border-radius: 50%;"> </div> <div class="participant-name ml-2">'+other_user_id+'</div> </div> <div class="participant-action-wrap display-center"> <div class="participant-action-dot display-center mr-2 cursor-pointer"> <span class="material-icons"> more_vert </span> </div> <div class="participant-action-pin display-center mr-2 cursor-pointer"> <span class="material-icons"> push_pin </span> </div> </div> </div>');

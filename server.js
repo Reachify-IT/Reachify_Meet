@@ -95,7 +95,26 @@ io.on("connection", (socket) => {
             });
         }
     });
+    socket.on("sendHandRaise",function(data){
+       // console.log("Disconnected");
+        var senderInfo=userConnections.find((p)=>p.connectionId==socket.id);
+        console.log("Sender info:", senderInfo);
+        if(senderInfo){
+            var meetingid=senderInfo.meeting_id;
+          //  userConnections.filter((p)=>p.connectionId!=socket.id);
+            var list=userConnections.filter((p)=>p.meeting_id==meetingid);
+            list.forEach((v)=>{
+                var userNumberAfUserLeave=userConnections.length;
+                socket.to(v.connectionId).emit("HandRaise_info_for_others",{
+                    connId:socket.id,
+                    handRaise:data
+                });
+            });
+        }
+    });
 });
+
+
 app.use(fileUpload());
 
 app.post("/attachimg",function(req,res){
