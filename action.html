@@ -44,7 +44,7 @@
         <h1>Creating Meetings<br>In <span style="background-color: #A959FF26;border-radius: 12px;">&nbsp;2 clicks&nbsp;
           </span></h1>
         <p class="focus">
-          Reachify helps you focus on what's important. Running great meetings. Powerful, yet simple to use. Spend less
+          Reachifyy helps you focus on what's important. Running great meetings. Powerful, yet simple to use. Spend less
           time planning. More time creating.
         </p>
         <ul class="d-flex " style="margin-top: 40px;">
@@ -166,23 +166,23 @@
 </div>
   </main>
   
-  <script src="https:code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
+  <script src="public/Assets/js/jquery-3.6.0.min.js"></script>
+  <script >
     $(function () {
       $(document).on("click", ".join-meeting", function () {
         $(".enter-code").focus();
-      })
+      });
       $(document).on("click", ".join-action", function () {
         var join_value = $('.enter-code').val();
         var meetingUrl = window.location.origin + "?meetingID=" + join_value;
         window.location.replace(meetingUrl);
-      })
+      });
       $(document).on("click", ".new-meeting", function () {
         var eight_d_value = Math.floor(Math.random() * 100000000);
         var meetingUrl = window.location.origin + "?meetingID=" + eight_d_value;
         window.location.replace(meetingUrl);
-      })
-    })
+      });
+    });
   </script>
 </body>
 
