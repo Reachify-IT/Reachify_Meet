@@ -35,12 +35,12 @@ var AppProcess = (function () {
       }
       if (isAudioMute) {
         audio.enabled = true;
-        $(this).html("<span class='material-icons' style='width:100%;'>mic</span>");
+        $(this).html("<span class='material-icons ricons' ><img src='public/Assets/images/micon.svg' alt='' ></span>");
         updateMediaSenders(audio, rtp_aud_senders);
         console.log(rtp_aud_senders);
       } else {
         audio.enabled = false;
-        $(this).html("<span class='material-icons' style='width:100%;'>mic_off</span>");
+        $(this).html("<span class='material-icons ricons' >mic_off</span>");
         removeMediaSenders(rtp_aud_senders);
         audio.stop();
         console.log(rtp_aud_senders);
@@ -122,9 +122,9 @@ var AppProcess = (function () {
   }
   async function videoProcess(newVideoState) {
     if(newVideoState==video_states.None){
-      $("#videoCamOnOff").html("<span class='material-icons' style='width:100%;'>videocam_off</span>");
+      $("#videoCamOnOff").html("<span class='material-icons  ricons' >videocam_off</span>");
       
-      $("#ScreenShareOnOf").html('<span class="material-icons">present_to_all</span><div>Present Now</div>');
+      $("#ScreenShareOnOf").html('<span class="material-icons  ricons"><img src="public/Assets/images/screenshare.svg" alt="" ></span>');
         video_st = newVideoState;
       removeVideoStream(rtp_vid_senders);
       console.log("rtp_vid_senders", rtp_vid_senders);
@@ -137,7 +137,7 @@ var AppProcess = (function () {
       return;
     }
     if (newVideoState == video_states.Camera) {
-      $("#videoCamOnOff").html("<span class='material-icons' style='width:100%;'>videocam_on</span>");
+      $("#videoCamOnOff").html("<span class='material-icons  ricons' ><img src='public/Assets/images/camon.svg' alt='' ></span>");
     }
     try {
       var vstream = null;
@@ -159,7 +159,7 @@ var AppProcess = (function () {
         });
         vstream.oninactive=(e)=>{
           removeVideoStream(rtp_vid_senders);
-          $("#ScreenShareOnOf").html('<span class="material-icons ">present_to_all</span><div>Present Now</div>');
+          $("#ScreenShareOnOf").html('<span class="material-icons  ricons"><img src="public/Assets/images/screenshare.svg" alt="" ></span>');
         };
       }
       if (vstream && vstream.getVideoTracks().length > 0) {
@@ -175,13 +175,13 @@ var AppProcess = (function () {
     } video_st = newVideoState;
 
      if(newVideoState==video_states.Camera){
-      $("#videoCamOnOff").html('<span class="material-icons" style="width:100%;">videocam</span>');
-      $("#ScreenShareOnOf").html('<span class="material-icons ">present_to_all</span><div >Present Now</div>'
+      $("#videoCamOnOff").html('<span class="material-icons ricons" ><img src="public/Assets/images/camon.svg" alt="" ></span>');
+      $("#ScreenShareOnOf").html('<span class="material-icons  ricons"><img src="public/Assets/images/screenshare.svg" alt="" ></span>'
       );
     } else if (newVideoState == video_states.ScreenShare) {
-      $("#videoCamOnOff").html('<span class="material-icons" style="width:100%;">videocam_off</span>');
+      $("#videoCamOnOff").html('<span class="material-icons ricons">videocam_off</span>');
 
-      $("#ScreenShareOnOf").html('<span class="material-icons text-success">present_to_all</span><div class="text-success">Stop Present Now</div>');
+      $("#ScreenShareOnOf").html('<span class="material-icons text-success  ricons" ><img src="public/Assets/images/screenshare.svg" alt="" ></span>');
     }
   }
   var iceConfiguration = {
