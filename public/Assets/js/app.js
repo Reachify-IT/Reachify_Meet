@@ -478,9 +478,10 @@ var MyApp = (function () {
         "<span class='font-weight-bold mr-3' style='color:black'>" +
           data.from +
           "</span>" +
-          lTime +
-          "</br>" +
-          data.message
+          
+          data.message+
+          lTime 
+          
       );
       $("#messages").append(div);
     });
@@ -507,15 +508,20 @@ var MyApp = (function () {
         minute: "numeric",
         hour12: true,
       });
-      var div = $("<div>").html(
-        "<span class='font-weight-bold mr-3' style='color:black'>" +
+      var div = $("<div style='display: flex; padding: 12px; align-items: center; flex: 1 0 0; align-self: stretch;max-width:100%'>").html(
+        "<span class='mr-3' style='font-weight: bold; color: black;'>" +
           user_id +
           "</span>" +
+          "<div style='background-color: #4817EB; background-size: cover; background-position: center; padding: 20px; display: flex; color: #FAFAFA; font-size: 16px; border-radius: 18px; font-family: Lato; font-style: normal; font-weight: 500;'>" +
+          "<span class='mr-3'>" +
+          msgData +
+          "</span>" +
+          "<div style='color: black; font-size: 10px;'>" +
           lTime +
-          "</br>" +
-          msgData
+          "</div>" +
+          "</div>"
       );
-      $("#messages").append(div);
+      $("#messages").prepend(div);
       $("#msgbox").val("");
     });
 
