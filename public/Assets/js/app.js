@@ -470,7 +470,7 @@ var MyApp = (function () {
       });
       var div = $("<div style='display: flex;margin-top:20px;align-items: flex-end;'>").html(
         "<span class='mr-3' style='color: white; background-color:#4817EB; border-radius: 18px; border-radius: 50%; width: 40px; height: 40px; display: inline-flex; justify-content: center; align-items: center;align-self: flex-end;'>" +
-        data.from +
+        data.from.charAt(0) +
         "</span>" + "<div style=' max-width:180px; font-size: 16px; word-wrap: break-word;border-radius:20px 20px 20px 0px;align-self:flex-start;background-color:#4817EB;box-shadow:-2px 2px 4px #dcdcdc;padding:10px;'>" +
         "<span class=' mr-3' style='color:white'>" +
         data.message +
@@ -504,7 +504,7 @@ var MyApp = (function () {
       });
       var div = $("<div style='display: flex;margin-top:20px;align-items: flex-end;'>").html(
         "<span class='mr-3' style='color: white; background-color:#4817EB; border-radius: 18px; border-radius: 50%; width: 40px; height: 40px; display: inline-flex; justify-content: center; align-items: center;align-self: flex-end;'>" +
-        user_id +
+        user_id.charAt(0) +
         "</span>" + "<div style=' max-width:180px; font-size: 16px; word-wrap: break-word;border-radius:20px 20px 20px 0px;align-self:flex-start;background-color:#4817EB;box-shadow:-2px 2px 4px #dcdcdc;padding:10px;'>" +
         "<span class=' mr-3' style='color:white'>" +
         msgData +
