@@ -474,16 +474,16 @@ var MyApp = (function () {
         minute: "numeric",
         hour12: true,
       });
-      var div = $("<div>").html(
-        "<span class='font-weight-bold mr-3' style='color:black'>" +
-          data.from +
+      var div = $("<div style='display: flex;margin-top:20px;align-items: flex-end;'>").html(
+        "<span class='mr-3' style='color: white; background-color:#4817EB; border-radius: 18px; border-radius: 50%; width: 40px; height: 40px; display: inline-flex; justify-content: center; align-items: center;align-self: flex-end;'>" +
+        data.from +
+          "</span>" +"<div style=' max-width:180px; font-size: 16px; word-wrap: break-word;border-radius:20px 20px 20px 0px;align-self:flex-start;background-color:#4817EB;box-shadow:-2px 2px 4px #dcdcdc;padding:10px;'>"+
+          "<span class=' mr-3' style='color:white'>" +
+          data.message +
           "</span>" +
-          
-          data.message+
-          lTime 
-          
+          "<span style='font-size:8px;color:white;justify-content: flex-end;  align-items: flex-end; '>"+lTime +"</span>"+"</div>"
       );
-      $("#messages").append(div);
+      $("#messages").prepend(div);
     });
   }
   function eventHandeling() {
@@ -508,19 +508,16 @@ var MyApp = (function () {
         minute: "numeric",
         hour12: true,
       });
-      var div = $("<div style='display: flex; padding: 12px; align-items: center; flex: 1 0 0; align-self: stretch;max-width:100%'>").html(
-        "<span class='mr-3' style='font-weight: bold; color: black;'>" +
-          user_id +
-          "</span>" +
-          "<div style='background-color: #4817EB; background-size: cover; background-position: center; padding: 20px; display: flex; color: #FAFAFA; font-size: 16px; border-radius: 18px; font-family: Lato; font-style: normal; font-weight: 500;'>" +
-          "<span class='mr-3'>" +
+      var div = $("<div style='display: flex;margin-top:20px;align-items: flex-end;'>").html(
+        "<span class='mr-3' style='color: white; background-color:#4817EB; border-radius: 18px; border-radius: 50%; width: 40px; height: 40px; display: inline-flex; justify-content: center; align-items: center;align-self: flex-end;'>" +
+        user_id +
+          "</span>" +"<div style=' max-width:180px; font-size: 16px; word-wrap: break-word;border-radius:20px 20px 20px 0px;align-self:flex-start;background-color:#4817EB;box-shadow:-2px 2px 4px #dcdcdc;padding:10px;'>"+
+          "<span class=' mr-3' style='color:white'>" +
           msgData +
           "</span>" +
-          "<div style='color: black; font-size: 10px;'>" +
-          lTime +
-          "</div>" +
-          "</div>"
+          "<span style='font-size:8px;color:white;justify-content: flex-end;  align-items: flex-end; '>"+lTime +"</span>"+"</div>"
       );
+    
       $("#messages").prepend(div);
       $("#msgbox").val("");
     });
@@ -564,19 +561,34 @@ var MyApp = (function () {
     $(".people-heading").removeClass("active");
   });
   $(document).on("click", ".meeting-heading-cross", function () {
-    $(".g-right-details-wrap").hide(300);
+    $(".right-chat-detail-wrap").hide(300);
+
+    $(".controls").show(300);
+  });
+  $(document).on("click", ".msgic", function () {
+    $(".in-call-wrap-up").hide(300);
+    $(".chat-show-wrap").show(300);
+    $(".people-heading").removeClass("active");
+    $(".controls").hide(300);
+  });
+  $(document).on("click", ".parts", function () {
+    $(".in-call-wrap-up").show(300);
+    $(".chat-show-wrap").hide(300);
+    $(".chat-heading").removeClass("active");
+    $(".controls").hide(300);
   });
   $(document).on("click", ".top-left-participant-wrap", function () {
     $(".people-heading").addClass("active");
     $(".chat-heading").removeClass("active");
-    $(".g-right-details-wrap").show(300);
+    $(".right-chat-detail-wrap").show(300);
     $(".in-call-wrap-up").show(300);
     $(".chat-show-wrap").hide(300);
+    $(".controls").hide(300);
   });
   $(document).on("click", ".top-left-chat-wrap", function () {
     $(".people-heading").removeClass("active");
     $(".chat-heading").addClass("active");
-    $(".g-right-details-wrap").show(300);
+    $(".right-chat-detail-wrap").show(300);
     $(".in-call-wrap-up").hide(300);
     $(".chat-show-wrap").show(300);
   });
@@ -589,7 +601,7 @@ var MyApp = (function () {
         '<div class="top-box align-vertical-middle profile-dialogue-show" style="width: 416px;height: 176px;border-radius: 15px;border:none;outline:none; background: var(--bg-new-home-screen, linear-gradient(113deg, #131313 43.65%, #565656 125.29%));"> <h4 class="mt-3" style="text-align:center;color:white;color:  #F8F8F8; font-family: Lato; font-size: 24px; font-style: normal;  font-weight: 500;  line-height: 150%;">Leave Meeting!</h4> <hr> <div class="call-leave-cancel-action d-flex justify-content-center align-items-center w-100"style="display: flex; height: 40px; padding: 12px 24px; justify-content: center; align-items: center; gap: 8px;"> <a href="/action.html"><button class="call-leave-action btn btn-danger mr-5"style="border-radius:25px;background-color:#F76969">Leave</button></a> <button class="call-cancel-action btn btn-secondary"style="display: flex; height: 40px;padding: 12px 24px;justify-content: center; align-items: center;gap: 8px;border-radius:25px;border-radius: 25px; border: 1px solid var(--text-secondary, rgba(48, 48, 48, 0.50));     background: var(--selection-side-bar, #FAFAFA);"><div style="color: #333;text-align: center; font-family: Lato;   font-size: 16px;   font-style: normal;   font-weight: 500;   line-height: 120%;">Cancel</button></div> </div> </div>'
       );
   });
-  $(document).mouseup(function (e) {
+ /* $(document).mouseup(function (e) {
     var container = new Array();
     container.push($(".top-box-show"));
     $.each(container, function (key, value) {
@@ -601,10 +613,24 @@ var MyApp = (function () {
   $(document).mouseup(function (e) {
     var container = new Array();
     container.push($(".g-details"));
-    container.push($(".g-right-details-wrap"));
+    container.push($(".right-chat-detail-wrap"));
     $.each(container, function (key, value) {
       if (!$(value).is(e.target) && $(value).has(e.target).length == 0) {
-        $(value).hide(300);
+        $(value).hide(300);  
+        
+        $(".controls").show(300);
+
+      }
+    });
+  });*/
+  $(document).mouseup(function (e) {
+    var container = new Array();
+    container.push($(".obuttons"));
+    $.each(container, function (key, value) {
+      if (!$(value).is(e.target) && $(value).has(e.target).length == 0) {
+        $(value).hide(300);  
+        
+
       }
     });
   });
@@ -625,18 +651,32 @@ var MyApp = (function () {
   $(document).on("click", ".meeting-details-button", function () {
     $(".g-details").slideDown(300);
   });
-  $(document).on("click", ".g-details-heading-attachment", function () {
-    $(".g-details-heading-show").hide();
-    $(".g-details-heading-show-attachment").show();
+  $(document).on("click", ".attachment-img", function () {
+    $(".attachment-block").show();
+    
     $(this).addClass("active");
-    $(".g-details-heading-detail").removeClass("active");
+  }); 
+  $(document).mouseup(function (e) {
+    var container = new Array();
+   
+    container.push($(".attachment-block"));
+    $.each(container, function (key, value) {
+      if (!$(value).is(e.target) && $(value).has(e.target).length == 0) {
+        $(value).hide(300);
+
+      }
+    });
   });
-  $(document).on("click", ".g-details-heading-detail", function () {
-    $(".g-details-heading-show").show();
-    $(".g-details-heading-show-attachment").hide();
-    $(this).addClass("active");
-    $(".g-details-heading-attachment").removeClass("active");
-  });
+ /* document.addEventListener('DOMContentLoaded', () => {
+    const gdetail = document.getElementsById('attachment');
+
+    gdetail.addEventListener('change', () => {
+        if (gdetail.files.length > 0) {
+          attachment.style.display = 'none';
+        }
+    });
+});*/
+
   var base_url = window.location.origin;
 
   $(document).on("change", ".custom-file-input", function () {

@@ -750,12 +750,51 @@ h2 {
     font-size: 15px;
 }
 
+
 .g-bottom {
     /* margin: 0 -10px !important; */
     background-color: none;
     color: blueviolet;
     padding: 0 20px;
     z-index: 2;
+}
+.chat-show-wrap {
+    position: relative;
+    height: 500px; /* Adjust the height as needed */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column-reverse;
+}
+.send-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #f9f9f9; /* Optional, to differentiate from the chat area */
+    border-top: 1px solid #ccc; /* Optional, for visual separation */
+}
+.send-bar img {
+    cursor: pointer;
+}
+.chat-message-sent-input-field {
+    flex-grow: 1;
+    border: none;
+    border-bottom: 1px solid teal;
+    padding: 10px;
+    margin-right: 10px;
+}
+.chat-message-sent-action {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.chat-message-sent-action button {
+    border-radius: 15px;
+    background-color: #4817EB;
+    margin-left: 20px;
 }
 
 .bottom-left {
@@ -769,11 +808,10 @@ h2 {
     width: 40px;
 }
 
-.g-right-details-wrap{
+.right-chat-detail-wrap{
     border-radius: 50px;
 border: 1px solid var(--gradient-1, #C0C0C0);
 background: var(--selection-side-bar, #FAFAFA);
-box-shadow: 1px 1px 2px 0px rgba(255, 255, 255, 0.30) inset, -1px -1px 2px 0px rgba(214, 214, 214, 0.50) inset, -5px 5px 10px 0px rgba(214, 214, 214, 0.20), 5px -5px 10px 0px rgba(214, 214, 214, 0.20), -5px -5px 10px 0px rgba(255, 255, 255, 0.90), 5px 5px 13px 0px rgba(214, 214, 214, 0.90);
 }
 
 
@@ -789,15 +827,18 @@ video {
     border: 1px solid gray;
     width: 300px;
 }
-#messages{
-   
-        display: flex;
-        flex-direction: column-reverse;
-        overflow-y: auto;
-        height: 300px;
-        max-width: 100%; /* Ensures the container doesn't exceed the parent width */
     
+   
+
+.chat-message-show{
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: auto;
+    height: 430px;
+    margin-bottom: -400px;
+    font-family: 'lato';
 }
+
 
 .active {
     background-color: #00808047;
@@ -827,10 +868,8 @@ video {
 .g-details {
     position: absolute;
     width: 30vw;
-    background-color: white;
     margin-top: -135px;
     margin-left:-450px;
-    counter-reset: black;
     border-radius: 5px;
     padding: 5px;
 }
