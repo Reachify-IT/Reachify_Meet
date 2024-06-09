@@ -12,7 +12,7 @@ var AppProcess = (function () {
   var video_st = video_states.None;
   var videoCamTrack;
   var serverProcess;
-  var  audio;
+  var audio;
   var isAudioMute = true;
   var rtp_aud_senders = [];
   var rtp_vid_senders = [];
@@ -40,7 +40,7 @@ var AppProcess = (function () {
         console.log(rtp_aud_senders);
       } else {
         audio.enabled = false;
-        $(this).html("<span class='material-icons ricons' >mic_off</span>");
+        $(this).html("<span class='material-icons ricons'style='color:white;' >mic_off</span>");
         removeMediaSenders(rtp_aud_senders);
         audio.stop();
         console.log(rtp_aud_senders);
@@ -64,68 +64,63 @@ var AppProcess = (function () {
       }
     });
   }
-  async function loadAudio(){
-    try{
-      var astream= await navigator.mediaDevices.getUserMedia({
+  async function loadAudio() {
+    try {
+      var astream = await navigator.mediaDevices.getUserMedia({
         video: false,
-        audio:true,
+        audio: true,
       });
-      audio=astream.getAudioTracks()[0];
-      audio.enabled=false;
-     }catch(e) 
-    {
+      audio = astream.getAudioTracks()[0];
+      audio.enabled = false;
+    } catch (e) {
       console.log(e);
     }
   }
-  function connection_status(connection){
-    if(connection &&(connection.connectionState == "new" ||
-    connection.connectionState == "connecting" 
-    ||connection.connectionState == "connected") )
-       {
+  function connection_status(connection) {
+    if (connection && (connection.connectionState == "new" ||
+      connection.connectionState == "connecting"
+      || connection.connectionState == "connected")) {
       return true;
-    } 
-    else{
+    }
+    else {
       return false;
     }
   }
-  async function updateMediaSenders(track,rtp_senders){
-    for(var con_id in peers_connection_ids){
-      if(connection_status(peers_connection[con_id])){
-        if(rtp_senders[con_id] && rtp_senders[con_id].track) {
+  async function updateMediaSenders(track, rtp_senders) {
+    for (var con_id in peers_connection_ids) {
+      if (connection_status(peers_connection[con_id])) {
+        if (rtp_senders[con_id] && rtp_senders[con_id].track) {
           rtp_senders[con_id].replaceTrack(track);
-        }else{
-          rtp_senders[con_id]=peers_connection[con_id].addTrack(track);
+        } else {
+          rtp_senders[con_id] = peers_connection[con_id].addTrack(track);
 
         }
       }
     }
   }
-  function removeMediaSenders(rtp_senders)
-  {
+  function removeMediaSenders(rtp_senders) {
     console.log("rtp_senders :", rtp_senders);
-    for(var con_id in peers_connection_ids){
-      if (rtp_senders[con_id] && connection_status(peers_connection[con_id])) 
-        {
+    for (var con_id in peers_connection_ids) {
+      if (rtp_senders[con_id] && connection_status(peers_connection[con_id])) {
         peers_connection[con_id].removeTrack(rtp_senders[con_id]);
-        rtp_senders[con_id]=null;
+        rtp_senders[con_id] = null;
       }
     }
   }
-  function removeVideoStream(rtp_vid_senders) 
-  {
-    if(videoCamTrack){
+  function removeVideoStream(rtp_vid_senders) {
+    if (videoCamTrack) {
       videoCamTrack.stop();
-      videoCamTrack=null;
-      local_div.srcObject=null;
+      videoCamTrack = null;
+      local_div.srcObject = null;
       removeMediaSenders(rtp_vid_senders);
     }
   }
   async function videoProcess(newVideoState) {
-    if(newVideoState==video_states.None){
-      $("#videoCamOnOff").html("<span class='material-icons  ricons' >videocam_off</span>");
-      
+    if (newVideoState == video_states.None) {
+      $("#videoCamOnOff").html("<span class='material-icons  ricons'style='color:white;' >videocam_off</span>");
+
       $("#ScreenShareOnOf").html('<span class="material-icons  ricons"><img src="public/Assets/images/screenshare.svg" alt="" ></span>');
-        video_st = newVideoState;
+      video_st = newVideoState;
       removeVideoStream(rtp_vid_senders);
       console.log("rtp_vid_senders", rtp_vid_senders);
       serverProcess(
@@ -137,7 +132,7 @@ var AppProcess = (function () {
       return;
     }
     if (newVideoState == video_states.Camera) {
-      $("#videoCamOnOff").html("<span class='material-icons  ricons' ><img src='public/Assets/images/camon.svg' alt='' ></span>");
+      $("#videoCamOnOff").html("<span class='material-icons  ' >videocam</span>");
     }
     try {
       var vstream = null;
@@ -157,7 +152,7 @@ var AppProcess = (function () {
           },
           audio: false,
         });
-        vstream.oninactive=(e)=>{
+        vstream.oninactive = (e) => {
           removeVideoStream(rtp_vid_senders);
           $("#ScreenShareOnOf").html('<span class="material-icons  ricons"><img src="public/Assets/images/screenshare.svg" alt="" ></span>');
         };
@@ -166,7 +161,7 @@ var AppProcess = (function () {
         videoCamTrack = vstream.getVideoTracks()[0];
         if (videoCamTrack) {
           local_div.srcObject = new MediaStream([videoCamTrack]);
-              updateMediaSenders(videoCamTrack,rtp_vid_senders);
+          updateMediaSenders(videoCamTrack, rtp_vid_senders);
         }
       }
     } catch (e) {
@@ -174,12 +169,12 @@ var AppProcess = (function () {
       return;
     } video_st = newVideoState;
 
-     if(newVideoState==video_states.Camera){
-      $("#videoCamOnOff").html('<span class="material-icons ricons" ><img src="public/Assets/images/camon.svg" alt="" ></span>');
+    if (newVideoState == video_states.Camera) {
+      $("#videoCamOnOff").html('<span class="material-icons ricons "style="color:white;" >videocam</span>');
       $("#ScreenShareOnOf").html('<span class="material-icons  ricons"><img src="public/Assets/images/screenshare.svg" alt="" ></span>'
       );
     } else if (newVideoState == video_states.ScreenShare) {
-      $("#videoCamOnOff").html('<span class="material-icons ricons">videocam_off</span>');
+      $("#videoCamOnOff").html('<span class="material-icons ricons"style="color:white;">videocam_off</span>');
 
       $("#ScreenShareOnOf").html('<span class="material-icons text-success  ricons" ><img src="public/Assets/images/screenshare.svg" alt="" ></span>');
     }
@@ -238,8 +233,7 @@ var AppProcess = (function () {
     };
     peers_connection_ids[connid] = connid;
     peers_connection[connid] = connection;
-    if (video_st==video_states.Camera ||video_st == video_states.ScreenShare ) 
-      {
+    if (video_st == video_states.Camera || video_st == video_states.ScreenShare) {
       if (videoCamTrack) {
         updateMediaSenders(videoCamTrack, rtp_vid_senders);
       }
@@ -263,7 +257,7 @@ var AppProcess = (function () {
   async function SDPProcess(message, from_connid) {
     message = JSON.parse(message);
     if (message.answer) {
-       await peers_connection[from_connid].setRemoteDescription(new 
+      await peers_connection[from_connid].setRemoteDescription(new
         RTCSessionDescription(message.answer)
       );
     } else if (message.offer) {
@@ -282,7 +276,7 @@ var AppProcess = (function () {
         }),
         from_connid
       );
-    
+
     } else if (message.icecandidate) {
       if (!peers_connection[from_connid]) {
         await setConnection(from_connid);
@@ -448,7 +442,7 @@ var MyApp = (function () {
       });
       var attachFileAreaForOther = document.querySelector(".show-attach-file");
 
-      attachFileAreaForOther.innerHTML += "<div class='left-align' style='display:flex; align-items:center;'><img src='public/assets/images/other.jpg' style='height:40px;width:40px;' class='caller-image circle'><div style='font-weight:600;margin:0 5px;'>" +data.username + "</div>:<div><a style='color:#007bff;' href='" +data.filePath + "' download>" + data.fileName +"</a></div></div><br/>";
+      attachFileAreaForOther.innerHTML += "<div class='left-align' style='display:flex; align-items:center;'><img src='public/assets/images/other.jpg' style='height:40px;width:40px;' class='caller-image circle'><div style='font-weight:600;margin:0 5px;'>" + data.username + "</div>:<div><a style='color:#007bff;' href='" + data.filePath + "' download>" + data.fileName + "</a></div></div><br/>";
     });
     socket.on("inform_me_about_other_user", function (other_users) {
       var userNumber = other_users.length;
@@ -477,11 +471,11 @@ var MyApp = (function () {
       var div = $("<div style='display: flex;margin-top:20px;align-items: flex-end;'>").html(
         "<span class='mr-3' style='color: white; background-color:#4817EB; border-radius: 18px; border-radius: 50%; width: 40px; height: 40px; display: inline-flex; justify-content: center; align-items: center;align-self: flex-end;'>" +
         data.from +
-          "</span>" +"<div style=' max-width:180px; font-size: 16px; word-wrap: break-word;border-radius:20px 20px 20px 0px;align-self:flex-start;background-color:#4817EB;box-shadow:-2px 2px 4px #dcdcdc;padding:10px;'>"+
-          "<span class=' mr-3' style='color:white'>" +
-          data.message +
-          "</span>" +
-          "<span style='font-size:8px;color:white;justify-content: flex-end;  align-items: flex-end; '>"+lTime +"</span>"+"</div>"
+        "</span>" + "<div style=' max-width:180px; font-size: 16px; word-wrap: break-word;border-radius:20px 20px 20px 0px;align-self:flex-start;background-color:#4817EB;box-shadow:-2px 2px 4px #dcdcdc;padding:10px;'>" +
+        "<span class=' mr-3' style='color:white'>" +
+        data.message +
+        "</span>" +
+        "<span style='font-size:8px;color:white;justify-content: flex-end;  align-items: flex-end; '>" + lTime + "</span>" + "</div>"
       );
       $("#messages").prepend(div);
     });
@@ -511,13 +505,13 @@ var MyApp = (function () {
       var div = $("<div style='display: flex;margin-top:20px;align-items: flex-end;'>").html(
         "<span class='mr-3' style='color: white; background-color:#4817EB; border-radius: 18px; border-radius: 50%; width: 40px; height: 40px; display: inline-flex; justify-content: center; align-items: center;align-self: flex-end;'>" +
         user_id +
-          "</span>" +"<div style=' max-width:180px; font-size: 16px; word-wrap: break-word;border-radius:20px 20px 20px 0px;align-self:flex-start;background-color:#4817EB;box-shadow:-2px 2px 4px #dcdcdc;padding:10px;'>"+
-          "<span class=' mr-3' style='color:white'>" +
-          msgData +
-          "</span>" +
-          "<span style='font-size:8px;color:white;justify-content: flex-end;  align-items: flex-end; '>"+lTime +"</span>"+"</div>"
+        "</span>" + "<div style=' max-width:180px; font-size: 16px; word-wrap: break-word;border-radius:20px 20px 20px 0px;align-self:flex-start;background-color:#4817EB;box-shadow:-2px 2px 4px #dcdcdc;padding:10px;'>" +
+        "<span class=' mr-3' style='color:white'>" +
+        msgData +
+        "</span>" +
+        "<span style='font-size:8px;color:white;justify-content: flex-end;  align-items: flex-end; '>" + lTime + "</span>" + "</div>"
       );
-    
+
       $("#messages").prepend(div);
       $("#msgbox").val("");
     });
@@ -541,10 +535,10 @@ var MyApp = (function () {
     $("#divUsers").append(newDivId);
     $(".in-call-wrap-up").append(
       '<div class="in-call-wrap d-flex justify-content-between align-items-center mb-3" id="participant_' +
-        connId +
-        '"> <div class="participant-img-name-wrap display-center cursor-pointer"> <div class="participant-img"> <img src="public/Assets/images/other.jpg" alt="" class="border border-secondary" style="height: 40px;width: 40px;border-radius: 50%;"> </div> <div class="participant-name ml-2"> ' +
-        other_user_id +
-        '</div> </div> <div class="participant-action-wrap display-center"> <div class="participant-action-dot display-center mr-2 cursor-pointer"> <span class="material-icons"> more_vert </span> </div> <div class="participant-action-pin display-center mr-2 cursor-pointer"> <span class="material-icons"> push_pin </span> </div> </div> </div>'
+      connId +
+      '"> <div class="participant-img-name-wrap display-center cursor-pointer"> <div class="participant-img"> <img src="public/Assets/images/other.jpg" alt="" class="border border-secondary" style="height: 40px;width: 40px;border-radius: 50%;"> </div> <div class="participant-name ml-2"> ' +
+      other_user_id +
+      '</div> </div> <div class="participant-action-wrap display-center"> <div class="participant-action-dot display-center mr-2 cursor-pointer"> <span class="material-icons"> more_vert </span> </div> <div class="participant-action-pin display-center mr-2 cursor-pointer"> <span class="material-icons"> push_pin </span> </div> </div> </div>'
     );
     $(".participant-count").text(userNum);
   }
@@ -601,35 +595,14 @@ var MyApp = (function () {
         '<div class="top-box align-vertical-middle profile-dialogue-show" style="width: 416px;height: 176px;border-radius: 15px;border:none;outline:none; background: var(--bg-new-home-screen, linear-gradient(113deg, #131313 43.65%, #565656 125.29%));"> <h4 class="mt-3" style="text-align:center;color:white;color:  #F8F8F8; font-family: Lato; font-size: 24px; font-style: normal;  font-weight: 500;  line-height: 150%;">Leave Meeting!</h4> <hr> <div class="call-leave-cancel-action d-flex justify-content-center align-items-center w-100"style="display: flex; height: 40px; padding: 12px 24px; justify-content: center; align-items: center; gap: 8px;"> <a href="/action.html"><button class="call-leave-action btn btn-danger mr-5"style="border-radius:25px;background-color:#F76969">Leave</button></a> <button class="call-cancel-action btn btn-secondary"style="display: flex; height: 40px;padding: 12px 24px;justify-content: center; align-items: center;gap: 8px;border-radius:25px;border-radius: 25px; border: 1px solid var(--text-secondary, rgba(48, 48, 48, 0.50));     background: var(--selection-side-bar, #FAFAFA);"><div style="color: #333;text-align: center; font-family: Lato;   font-size: 16px;   font-style: normal;   font-weight: 500;   line-height: 120%;">Cancel</button></div> </div> </div>'
       );
   });
- /* $(document).mouseup(function (e) {
-    var container = new Array();
-    container.push($(".top-box-show"));
-    $.each(container, function (key, value) {
-      if (!$(value).is(e.target) && $(value).has(e.target).length == 0) {
-        $(value).empty();
-      }
-    });
-  });
-  $(document).mouseup(function (e) {
-    var container = new Array();
-    container.push($(".g-details"));
-    container.push($(".right-chat-detail-wrap"));
-    $.each(container, function (key, value) {
-      if (!$(value).is(e.target) && $(value).has(e.target).length == 0) {
-        $(value).hide(300);  
-        
-        $(".controls").show(300);
-
-      }
-    });
-  });*/
+  
   $(document).mouseup(function (e) {
     var container = new Array();
     container.push($(".obuttons"));
     $.each(container, function (key, value) {
       if (!$(value).is(e.target) && $(value).has(e.target).length == 0) {
-        $(value).hide(300);  
-        
+        $(value).hide(300);
+
 
       }
     });
@@ -653,12 +626,12 @@ var MyApp = (function () {
   });
   $(document).on("click", ".attachment-img", function () {
     $(".attachment-block").show();
-    
+
     $(this).addClass("active");
-  }); 
+  });
   $(document).mouseup(function (e) {
     var container = new Array();
-   
+
     container.push($(".attachment-block"));
     $.each(container, function (key, value) {
       if (!$(value).is(e.target) && $(value).has(e.target).length == 0) {
@@ -667,15 +640,18 @@ var MyApp = (function () {
       }
     });
   });
- /* document.addEventListener('DOMContentLoaded', () => {
-    const gdetail = document.getElementsById('attachment');
+  $(document).mouseup(function (e) {
+    var container = new Array();
 
-    gdetail.addEventListener('change', () => {
-        if (gdetail.files.length > 0) {
-          attachment.style.display = 'none';
-        }
+    container.push($(".g-details"));
+    $.each(container, function (key, value) {
+      if (!$(value).is(e.target) && $(value).has(e.target).length == 0) {
+        $(value).hide(300);
+
+      }
     });
-});*/
+  });
+
 
   var base_url = window.location.origin;
 
@@ -734,14 +710,19 @@ var MyApp = (function () {
     $(this)
       .removeClass()
       .addClass("stop-record btn-danger text-dark")
+      .css("border", "none")
+
       .text("Stop Recording");
     startRecording();
   });
   $(document).on("click", ".stop-record", function () {
     $(this)
       .removeClass()
-      .addClass("start-record btn-dark text-danger")
+      .addClass("start-record otext recafter")
+      .css("border", "none")
+
       .text("Start Recording");
+
     mediaRecorder.stop();
   });
 
@@ -771,7 +752,7 @@ var MyApp = (function () {
   async function startRecording() {
     const screenStream = await captureScreen();
     const audioStream = await captureAudio();
-    const stream = new MediaStream([ ...screenStream.getTracks(),  ...audioStream.getTracks(),
+    const stream = new MediaStream([...screenStream.getTracks(), ...audioStream.getTracks(),
     ]);
     mediaRecorder = new MediaRecorder(stream);
     mediaRecorder.start();

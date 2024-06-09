@@ -34,24 +34,24 @@
 
 <body>
     <main class=" d-flex flex-column home-wrap">
-        <div class="g-top text-light">
+        <div class="video_outer">
             <div class="top-remote-video-show-wrap d-flex" style="background-color: #131313;">
                 <div id="meetingContainer" style="display: none ;flex-basis:75%;">
-                    <div class="call-wrap" style="background-color: #131313;">
-                        <div class="video-wrap" id="divUsers" style="display:flex; flex-wrap:wrap;">
-                            <div id="me" class="userbox display-center flex-column">
-                                <h2 class="display-center" style="font-size: 14px;"></h2>
+                    <div class="call-wrap " style="background-color: #131313;">
+                        <div class="video-wrap d-flex " id="divUsers" style="gap:24px;" >
+                            <div id="me" class="userbox display-center  " style=" position: relative;width: 100%;">
+                                <h2 class="display-center  user_heading" style="font-size: 14px;"></h2>
+                                
                                 <!-- ......................HandRaise ...............-->
                                 <div class="display-center" style="position: relative;">
                                     <img class="handRaise" src="/public/Assets/images/handRaise.png"
                                         style="position: absolute;height: 30px;top:8%; left: 3%;display: none;" />
-
                                     <!-- .....................HandRaise .................-->
-                                    <video autoplay muted id="locaVideoPlayer" style=""></video>
+                                    <video autoplay muted id="locaVideoPlayer"><img src="public/Assets/images/user.svg"></img></video>
                                 </div>
                             </div>
-                            <div id="otherTemplate" class="userbox display-center flex-column" style="display:none">
-                                <h2 class="display-center" style="font-size: 14px;"></h2>
+                            <div id="otherTemplate" class="userbox display-center " style="display:none">
+                                <h2 class="display-center user_heading"style="font-size: 14px;"></h2>
                                 <!-- .....................HandRaise .................-->
                                 <div class="display-center" style="position: relative;">
                                     <img src="/public/Assets/images/handRaise.png"
@@ -61,6 +61,8 @@
                                     <audio autoplay controls style="display:none"></audio>
                                 </div>
                             </div>
+
+                           
 
                         </div>
 
@@ -79,7 +81,7 @@
                         style="height: 10vh;font-size: 14px;">
                         <div class="people-heading display-center cursor-pointer">
                             <div class="people-headin-icon display-center mr-1">
-                                <span class="material-icons">people</span>
+                                <span class="material-icons ">people</span>
                             </div>
                             <div class="people-headin-text display-center">
                                 Participant (<span class="participant-count">1</span>)
@@ -178,10 +180,10 @@
                 <div class="controls">
                     <div class="mic-toggle-wrap action-icon-style display-center mr-2 cursor-pointer"
                         id="miceMuteUnmute">
-                        <span class="material-icons ricons">mic_off</span>
+                        <span class="material-icons ricons"style="color:white;">mic_off</span>
                     </div>
                     <div class="video-toggle-wrap action-icon-style display-center cursor-pointer" id="videoCamOnOff">
-                        <span class="material-icons ricons">videocam_off</span></div>
+                        <span class="material-icons ricons"style="color:white;">videocam_off</span></div>
                     <div class="present-now-wrap d-flex just-content-center flex-column align-items-center mr-5 cursor-pointer"
                         id="ScreenShareOnOf">
                         <span class="material-icons ricons"> <img src="public/Assets/images/screenshare.svg"
@@ -207,54 +209,53 @@
                     </div>
                     <div class="top-left-participant-wrap pt-2 cursor-pointer">
                         <div class="top-left-participant-icon">
-                            <span class="material-icons ricons parts">people</span>
+                            <span class="material-icons ricons "style="color:white;">people</span>
                         </div>
-                        <div class="top-left-participant-count participant-count ">1</div>
+                        <div class="top-left-participant-count participant-count "style="color:white;">1</div>
                     </div>
                     <div class="top-left-time-wrap"></div>
                     <div class=" cursor-pointer display-center " style=" margin-top:-16px;position: relative;">
+                        
                         <div class="recording-show obuttons">
-
-                            <button class="btn otext cursor-pointer meeting-details-button g-details-heading">Invite
+                               
+                              <div class="d-flex">
+                                <img src="public/Assets/images/invite.svg"style="gap:8px;" >
+                            <button class="btn otext cursor-pointer meeting-details-button">Invite
                                 people
-
+                               
 
                             </button>
-                            <div class="g-bottom  m-0 d-flex justify-content-between align-items-center">
-                                <div class="g-details border border-success mb-2"
-                                    style="display: none;min-height: 19.5vh;">
-                                    <div
-                                        class="g-details-heading d-flex justify-content-between align-items-center border-bottom pb-1">
-                                        <div class="g-details-heading-detail d-flex align-items-center cursor-pointer">
-                                            <span class="material-icons">error</span
-                                                style="margin-top:-5px">Details<span></span>
-                                        </div>
-
-                                    </div>
-                                    <div class="g-details-heading-show-wrap">
-                                        <div class="g-details-heading-show">
-                                            <div style="font-weight: 600;color:gray">Joining Info</div>
-                                            <div class="meeting_url" style="padding: 5px 0;" data-toggle="tooltip"
-                                                data-placement="top"></div>
-                                            <div style="cursor: pointer;">
-                                                <span class="material-icons"
-                                                    style="font-size: 14px;">content_copy</span>
-                                                <span class="copy_info font-weight-bold">Copy Joining Info <span
-                                                        style="display: none;background-color: aquamarine; border-radius: 5px;"
-                                                        class="link-conf font-weight-bold p-1">Link Copied</span></span>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-
-
-
+                            </div>
+                            
+                             <div class="d-flex">
+                                <img src="public/Assets/images/rec.svg"style="gap:8px;">
+                            <button class="btn start-record otext">Start Recording</button>
+                        </div>
+                        <div class="g-details border border-success mb-2"
+                        style="min-height: 19.5vh;display: none;">
+                        <div  class="g-details-heading d-flex justify-content-between align-items-center border-bottom pb-1">
+                            <div class="g-details-heading-detail d-flex align-items-center cursor-pointer">
+                                <span class="material-icons">error</span
+                                    style="margin-top:-5px">Details<span></span>
                             </div>
 
-                            <button class="btn start-record otext">Start Recording</button>
+                        </div>
+                        <div class="g-details-heading-show-wrap">
+                            <div class="g-details-heading-show">
+                                <div style="font-weight: 600;color:gray">Joining Info</div>
+                                <div class="meeting_url" style="padding: 5px 0;" data-toggle="tooltip"
+                                    data-placement="top"></div>
+                                <div style="cursor: pointer;">
+                                    <span class="material-icons"
+                                        style="font-size: 14px;">content_copy</span>
+                                    <span class="copy_info font-weight-bold">Copy Joining Info <span
+                                            style="display: none;background-color: rgb(13, 102, 72); border-radius: 5px;"
+                                            class="link-conf font-weight-bold p-1">Link Copied</span></span>
+                                </div>
+                            </div>
 
+                    </div>
+                </div>
                         </div>
                         <div class="option-icon">
                             <span class="material-icons ricons "> <img src="public/Assets/images/options.svg"
@@ -275,14 +276,13 @@
         <div class="g-bottom  m-0 d-flex justify-content-between align-items-center">
             <div class="bottom-left d-flex" style="height:10vh">
 
-                <div class="bottom-middle d-flex just-content-center align-items-center"
-                    style="height: 10vh; margin-left: 600px;">
+                
 
                     <div class="end-call-wrap action-icon-style display-center cursor-pointer" style="width: 64px;height: 44px;display: inline-flex;
                 padding: 10px 20px;;border-radius: 50px;background-color: #FF4B4B;
                 gap: 8px;">
                         <img src="public/Assets/images/phone.svg"></img>
-                    </div>
+                    
                 </div>
             </div>
 
@@ -306,8 +306,9 @@
                     <!-- This will be filled with the data from the server -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="denyButton">Deny</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal" id="allowButton">Allow</button>
+
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="denyButton">Deny</button>
                 </div>
             </div>
         </div>
