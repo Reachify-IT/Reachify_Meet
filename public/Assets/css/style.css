@@ -896,6 +896,12 @@ video {
     width: 100%;
     
 }
+.navigation img{
+    background-color: none;
+    color: wheat;
+    width: 25px;
+    height: 25px;
+}
     
 
 

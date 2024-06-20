@@ -35,10 +35,16 @@
 <body>
     <main class=" d-flex flex-column home-wrap">
         <div class="video_outer">
+
             <div class="top-remote-video-show-wrap d-flex" style="background-color: #131313;">
-                <div id="meetingContainer" style="display: none ;flex-basis:75%;">
-                    <div class="call-wrap " style="background-color: #131313;">
-                        <div class="video-wrap d-flex " id="divUsers" style="gap:24px;" >
+                <div class="navigation">
+                    <button  id="prevButton"  onclick="prevPage()">    <img src="public/Assets/images/next.svg" style="transform: rotate(180deg);">
+                    </button>
+                  </div> 
+
+                <div class="meeting-container"id="meetingContainer" style="display: none ;flex-basis:75%;">
+                    <div class="call-wrap "id="callwrap" style="background-color: #131313;">
+                        <div class="video-wrap " id="divUsers" style="display: flex; gap: 24px;">
                             <div id="me" class="userbox display-center  " style=" position: relative;width: 100%;">
                                 <h2 class="display-center  user_heading" style="font-size: 14px;"></h2>
                                 
@@ -47,7 +53,7 @@
                                     <img class="handRaise" src="/public/Assets/images/handRaise.png"
                                         style="position: absolute;height: 30px;top:8%; left: 3%;display: none;" />
                                     <!-- .....................HandRaise .................-->
-                                    <video autoplay muted id="locaVideoPlayer"><img src="public/Assets/images/user.svg"></img></video>
+                                    <video autoplay muted id="locaVideoPlayer"></video>
                                 </div>
                             </div>
                             <div id="otherTemplate" class="userbox display-center " style="display:none">
@@ -67,7 +73,11 @@
                         </div>
 
                     </div>
-                </div>
+                </div>                      
+                <div class="navigation">
+                    <button  id="nextButton" onclick="nextPage()"><img src="public/Assets/images/next.svg"></button>
+                </div> 
+
                 <div class="right-chat-detail-wrap bg-light text-secondary h-100"
                     style="display:none;flex-basis: 25%;  z-index: 1; border-radius: 50px;margin:0px 20px -20px 60px;">
                     <div class="meeting-heading-wrap d-flex justify-content-between align-items-center pr-3 pl-3"

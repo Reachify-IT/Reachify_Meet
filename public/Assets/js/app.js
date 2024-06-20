@@ -531,8 +531,56 @@ var MyApp = (function () {
     newDivId.find("video").attr("id", "v_" + connId);
     newDivId.find("audio").attr("id", "a_" + connId);
     newDivId.find("img").attr("id", "hand_" + connId);
-    newDivId.show();
-    $("#divUsers").append(newDivId);
+    const gridContainer = document.getElementsByClassName("video-wrap");
+    const prevButton = document.getElementById("prevButton");
+    const nextButton = document.getElementById("nextButton");
+    let currentPage = 0;
+    let boxesPerPage = 1; // Number of boxes per page
+    let totalBoxes = userNum; // Initial total number of boxes
+
+    function renderGrid() {
+        $("#divUsers").empty(); // Clear previous grid
+
+        let start = currentPage * boxesPerPage;
+        let end = Math.min(start + boxesPerPage, totalBoxes);
+
+        for (let i = start; i < end; i++) {
+            let box = newDivId.clone();
+            box.show();
+            $("#divUsers").append(box);
+        }
+
+        // Show/hide navigation buttons based on current page
+        if (currentPage === 0) {
+            prevButton.style.display = 'none';
+        } else {
+            prevButton.style.display = 'inline-block';
+        }
+
+        if (end >= totalBoxes) {
+            nextButton.style.display = 'none';
+        } else {
+            nextButton.style.display = 'inline-block';
+        }
+    }
+
+    $(document).on("click", "#prevButton", function () {
+        currentPage--;
+        renderGrid();
+    });
+
+    $(document).on("click", "#nextButton", function () {
+        currentPage++;
+        renderGrid();
+    });
+
+    function addBox() {
+        totalBoxes++;
+        renderGrid();
+    }
+
+    renderGrid();
+
     $(".in-call-wrap-up").append(
       '<div class="in-call-wrap d-flex justify-content-between align-items-center mb-3" id="participant_' +
       connId +
@@ -595,7 +643,7 @@ var MyApp = (function () {
         '<div class="top-box align-vertical-middle profile-dialogue-show" style="width: 416px;height: 176px;border-radius: 15px;border:none;outline:none; background: var(--bg-new-home-screen, linear-gradient(113deg, #131313 43.65%, #565656 125.29%));"> <h4 class="mt-3" style="text-align:center;color:white;color:  #F8F8F8; font-family: Lato; font-size: 24px; font-style: normal;  font-weight: 500;  line-height: 150%;">Leave Meeting!</h4> <hr> <div class="call-leave-cancel-action d-flex justify-content-center align-items-center w-100"style="display: flex; height: 40px; padding: 12px 24px; justify-content: center; align-items: center; gap: 8px;"> <a href="/action.html"><button class="call-leave-action btn btn-danger mr-5"style="border-radius:25px;background-color:#F76969">Leave</button></a> <button class="call-cancel-action btn btn-secondary"style="display: flex; height: 40px;padding: 12px 24px;justify-content: center; align-items: center;gap: 8px;border-radius:25px;border-radius: 25px; border: 1px solid var(--text-secondary, rgba(48, 48, 48, 0.50));     background: var(--selection-side-bar, #FAFAFA);"><div style="color: #333;text-align: center; font-family: Lato;   font-size: 16px;   font-style: normal;   font-weight: 500;   line-height: 120%;">Cancel</button></div> </div> </div>'
       );
   });
-  
+
   $(document).mouseup(function (e) {
     var container = new Array();
     container.push($(".obuttons"));
